@@ -1,0 +1,64 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  input[type="text"] {
+    text-transform: capitalize;
+}
+
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  input[type="number"],
+  input[type="text"],
+  input[type="tel"],
+  select {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  input[type="reset"],
+  input[type="submit"],
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  input[type="reset"]:hover,
+  input[type="submit"]:hover,
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Ajustes de diseño específicos para el formulario */
+  #padre {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  #padre input[type="reset"],
+  #padre input[type="submit"],
+  #padre button {
+    width: auto;
+    float: right;
+    margin-top: 10px;
+  }
+  
+  #padre::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  

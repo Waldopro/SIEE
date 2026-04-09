@@ -1,0 +1,83 @@
+table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 8px;
+    }
+
+    th {
+        background-image: linear-gradient(to bottom, #007bff, #0000ff);
+
+        color: #fff;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+        /* Color de fondo para filas pares */
+    }
+
+    tr:nth-child(odd) {
+        background-color: #ffffff;
+        /* Color de fondo para filas impares */
+    }
+
+    nav {
+        margin-top: 20px;
+    }
+
+    nav a,
+    button {
+        color: white;
+        background-image: linear-gradient(to bottom, #007bff, #0000ff);
+        padding: 10px 15px;
+        text-decoration: none;
+        font-size: 18px;
+        border-radius: 5px;
+        transition: transform 0.2s;
+    }
+
+    nav a:hover,
+    button:hover {
+        padding: 10px 20px;
+        background-image: linear-gradient(to bottom, #007bff, #0000ff);
+        border: none;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #000;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .container {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .eliminar-button {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: blue;
+        border-radius: 20px;
+        color: white;
+        text-decoration: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .eliminar-button:hover {
+        background-color: white;
+        border-radius: 20px;
+        color: #007bff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+  
+
+    .content {
+        margin-bottom: 60px;
+        /* Altura del pie de página */
+    }

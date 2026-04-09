@@ -1,0 +1,256 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    
+}
+
+body {
+    min-height: 100vh;
+    position: relative;
+    background-image: url('../img/portad.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    backdrop-filter: blur(8px);
+    /* Ajusta el valor del desenfoque según tus necesidades */
+}
+
+
+/* Estilos del menú de navegación */
+.navbar {
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(0, 123, 255, 0.8), rgba(255, 255, 255, 0.8));
+    color: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    position: relative;
+    text-decoration: none;
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+    display: block;
+}
+
+.navbar .submenu {
+    display: none;
+    position: absolute;
+    z-index: 1001;
+    background-image: linear-gradient(to bottom, #007bff, #0000ff);
+    padding: 10px;
+    list-style: none;
+    margin-top: 0;
+    margin-left: -10px;
+    text-align: none;
+}
+
+.navbar .submenu li {
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.navbar .submenu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.navbar li:hover .submenu {
+    display: block;
+    text-decoration: none;
+}
+
+
+/* Cambiar el fondo y el color del texto al pasar el cursor sobre los enlaces */
+.navbar a:hover {
+    background-color: rgba(255, 255, 255, 0.6); /* Cambia el color de fondo al pasar el cursor */
+    color: #007bff; /* Cambia el color del texto al pasar el cursor */
+text-decoration: none;
+}
+
+.navbar .submenu a:hover {
+    background-color: rgba(255, 255, 255, 0.6); /* Cambia el color de fondo al pasar el cursor */
+    color: #007bff; /* Cambia el color del texto al pasar el cursor */
+text-decoration: none;
+}
+
+.navbar .submenu a {
+    font-size: 25px;
+    text-decoration: none;
+}
+
+
+.team-member {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.team-member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.team-member h3 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.team-member p {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Contenedor principal */
+.container {
+    padding-top: 50px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Mensaje de bienvenida y última conexión */
+.welcome-info {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.bienvenida {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.ultima-conexion {
+    font-size: 18px;
+}
+.h1{
+    color: white;
+}
+/* Contenido de la página */
+.content {
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    
+}
+
+.content h1 {
+    font-size: 32px;
+   
+}
+
+.content p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Pie de página */
+
+
+.logout-button {
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    background-color: #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #0056b3;
+}
+.wrapper {
+    min-height: 100%;
+    position: relative;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    position: relative;
+}
+
+.content {
+    flex: 1;
+    padding-bottom: 80px; /* Altura del footer */
+}
+
+.alert-overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+            z-index: 9999; /* Asegura que esté encima de otros elementos */
+        }
+
+        /* Estilos para el cuadro de la alerta */
+        .alert-box {
+    max-width: 500px; /* Ancho máximo del cuadro */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* Fondo semi transparente (blanco con opacidad 0.7) */
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.btn-entendido {
+    display: block;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-entendido:hover {
+    background-color: #0056b3;
+}
+.container-1{
+    display: flex;
+    flex-wrap: wrap;
+}
+.content-1{
+    display:flex;
+    width:50%;
+    box-sizing: border-box;
+    padding: 20px;
+    background: rgba(255,255,255,0.9);
+}
+.flex{
+    display: flex;
+}

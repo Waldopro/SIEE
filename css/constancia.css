@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  .co {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .pdf,
+  .excel {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .pdf a,
+  .excel a {
+    text-decoration: none;
+    background-color: #337ab7;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  .pdf a:hover,
+  .excel a:hover {
+    background-color: #23527c;
+  }
+  
+  .repu {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  img {
+    float: left;
+    margin-right: 10px;
+  }
+  
+  @media print {
+    .pdf,
+    .excel {
+      display: none;
+    }
+  }
+  

@@ -1,0 +1,451 @@
+pero mi codigo de estudiante estudiante.php es asi <?php
+include '../../verificar_session.php';
+include('../../conexion/conndb.php');
+include('../../validacion.php');
+include('../insertar.php');
+
+
+// Suponiendo que has añadido la columna foto a la tabla familia
+$estudiante = $_POST['estudiante'];
+$id_estudiante = insertarEstudiante($estudiante, $conexion);
+$id_representante = $_SESSION['representante_estudiante'];
+$id_padre_madre = $_SESSION['padre_madre_estudiante'];
+
+if (isset($_POST['no_cedula'])) {
+    $cedula_estudiante = $_SESSION['cedula_representante'];
+} else {
+    $cedula_estudiante = $_POST['estudiante']['cedula_e'];
+}
+
+// Procesar el archivo de imagen si se ha subido una foto
+$foto = null;
+if (isset($_FILES['foto'])) {
+    if ($_FILES['foto']['error'] == UPLOAD_ERR_OK) {
+        $foto_tmp_name = $_FILES['foto']['tmp_name'];
+        $foto_name = basename($_FILES['foto']['name']);
+        $upload_dir = '../../uploads/estudiantes/';
+
+        // Verifica si la carpeta de destino existe
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+
+        $foto_path = $upload_dir . $foto_name;
+
+        // Verifica si el archivo temporal existe
+        if (file_exists($foto_tmp_name)) {
+            // Prueba a mover el archivo
+            if (move_uploaded_file($foto_tmp_name, $foto_path)) {
+                $foto = $foto_path;
+            } else {
+                echo "Error al mover el archivo.";
+            }
+        } else {
+            echo "El archivo temporal no existe.";
+        }
+    } else {
+        echo "Error al subir la foto: " . $_FILES['foto']['error'];
+    }
+} else {
+    echo "No se ha subido ninguna foto.";
+}
+
+
+$sql_familia = 'INSERT INTO familia (id_estudiante, id_representante, id_padre_madre, foto) VALUES (?, ?, ?, ?)';
+$stmt_familia = $conexion->prepare($sql_familia);
+$stmt_familia->bind_param('iiis', $id_estudiante, $id_representante, $id_padre_madre, $foto);
+
+$response = array();
+
+if ($stmt_familia->execute()) {
+    $response['success'] = true;
+} else {
+    $response['success'] = false;
+    $response['error'] = 'Error al registrar familia: ' . $stmt_familia->error;
+}
+
+$stmt_familia->close();
+$conexion->close();
+
+header('Content-Type: application/json');
+echo json_encode($response);
+
+// Redirigir a procesare.php si todo fue exitoso
+if ($response['success']) {
+    header('Location: ../../procesar/procesare.php');
+    exit();
+}
+?>  y mi base de datos asi -- phpMyAdmin SQL Dump
+-- version 5.2.1deb1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: localhost:3306
+-- Tiempo de generación: 19-11-2024 a las 03:34:04
+-- Versión del servidor: 10.11.6-MariaDB-0+deb12u1
+-- Versión de PHP: 8.2.24
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `escuela`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `aulas`
+--
+
+CREATE TABLE `aulas` (
+  `id_aula` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cargo`
+--
+
+CREATE TABLE `cargo` (
+  `id` int(11) NOT NULL,
+  `nombre_cargo` enum('Master','Admin','Usuario') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `curso`
+--
+
+CREATE TABLE `curso` (
+  `id` int(11) NOT NULL,
+  `id_aula` int(11) NOT NULL,
+  `id_grado` int(11) NOT NULL,
+  `id_seccion` int(11) NOT NULL,
+  `id_docente` int(11) NOT NULL,
+  `capacidad` int(2) NOT NULL,
+  `anho` year(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `docentes`
+--
+
+CREATE TABLE `docentes` (
+  `id` int(11) NOT NULL,
+  `cedula` int(8) NOT NULL,
+  `nombres` varchar(255) NOT NULL,
+  `apellidos` varchar(255) NOT NULL,
+  `gdo_ins` enum('grado 1','grado 2','grado 3','grado 4','grado 5','grado 6','grado 7') NOT NULL,
+  `aula_id` int(11) DEFAULT NULL,
+  `habilitado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estadisticas_inscripcion`
+--
+
+CREATE TABLE `estadisticas_inscripcion` (
+  `año` year(4) NOT NULL,
+  `total_estudiantes` int(11) NOT NULL,
+  `total_masculinos` int(11) NOT NULL,
+  `total_femeninos` int(11) NOT NULL,
+  `total_nuevos` int(11) NOT NULL,
+  `total_regulares` int(11) NOT NULL,
+  `total_repitientes` int(11) NOT NULL,
+  `grado_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estudiante`
+--
+
+CREATE TABLE `estudiante` (
+  `id_estudiante` int(11) NOT NULL,
+  `cedula_e` int(8) NOT NULL,
+  `apellidos_e` varchar(50) NOT NULL,
+  `nombres_e` varchar(50) NOT NULL,
+  `fecha_nac` date NOT NULL,
+  `edad_e` int(11) NOT NULL,
+  `sexo` enum('Masculino','Femenino') NOT NULL,
+  `peso` int(3) NOT NULL,
+  `talla` enum('SS','S','M','L') NOT NULL,
+  `lugar_nac` varchar(50) NOT NULL,
+  `municipio` varchar(50) NOT NULL,
+  `estado` varchar(50) NOT NULL,
+  `parroquia` varchar(50) NOT NULL,
+  `direccion_e` varchar(100) NOT NULL,
+  `tel_e` varchar(12) NOT NULL,
+  `posee_can` enum('Si','No') NOT NULL,
+  `serial_can` varchar(50) DEFAULT NULL,
+  `becado` enum('Si','No') NOT NULL,
+  `ins_para` year(4) NOT NULL,
+  `tipo_ins` enum('Nuevo','Regular','Repitiente') NOT NULL,
+  `copias_ci` enum('Si','No') NOT NULL,
+  `partida_nac_co` enum('Si','No') NOT NULL,
+  `historia_esc` enum('Si','No') NOT NULL,
+  `cert_prom` enum('Si','No') NOT NULL,
+  `tarj_vac` enum('Si','No') NOT NULL,
+  `cons_conduc` enum('Si','No') NOT NULL,
+  `cons_retiro` enum('Si','No') NOT NULL,
+  `cert_notas` enum('Si','No') NOT NULL,
+  `fotos` enum('si','no') NOT NULL,
+  `grado_id` int(11) NOT NULL,
+  `seccion_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Disparadores `estudiante`
+--
+DELIMITER $$
+CREATE TRIGGER `after_estudiante_delete` AFTER DELETE ON `estudiante` FOR EACH ROW BEGIN
+    DECLARE total_estudiantes INT;
+    DECLARE total_masculinos INT;
+    DECLARE total_femeninos INT;
+    DECLARE total_nuevos INT;
+    DECLARE total_regulares INT;
+    DECLARE total_repitientes INT;
+
+    -- Contar los estudiantes para el año y grado específicos del antiguo registro
+    SELECT COUNT(*) INTO total_estudiantes FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id;
+    SELECT COUNT(*) INTO total_masculinos FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND sexo = 'Masculino';
+    SELECT COUNT(*) INTO total_femeninos FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND sexo = 'Femenino';
+    SELECT COUNT(*) INTO total_nuevos FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND tipo_ins = 'Nuevo';
+    SELECT COUNT(*) INTO total_regulares FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND tipo_ins = 'Regular';
+    SELECT COUNT(*) INTO total_repitientes FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND tipo_ins = 'Repitiente';
+
+    -- Insertar o actualizar las estadísticas para el antiguo registro
+    INSERT INTO estadisticas_inscripcion (año, grado_id, total_estudiantes, total_masculinos, total_femeninos, total_nuevos, total_regulares, total_repitientes)
+    VALUES (OLD.ins_para, OLD.grado_id, total_estudiantes, total_masculinos, total_femeninos, total_nuevos, total_regulares, total_repitientes)
+    ON DUPLICATE KEY UPDATE
+        total_estudiantes = VALUES(total_estudiantes),
+        total_masculinos = VALUES(total_masculinos),
+        total_femeninos = VALUES(total_femeninos),
+        total_nuevos = VALUES(total_nuevos),
+        total_regulares = VALUES(total_regulares),
+        total_repitientes = VALUES(total_repitientes);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_estudiante_insert` AFTER INSERT ON `estudiante` FOR EACH ROW BEGIN
+    DECLARE total_estudiantes INT;
+    DECLARE total_masculinos INT;
+    DECLARE total_femeninos INT;
+    DECLARE total_nuevos INT;
+    DECLARE total_regulares INT;
+    DECLARE total_repitientes INT;
+
+    SELECT COUNT(*) INTO total_estudiantes FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id;
+    SELECT COUNT(*) INTO total_masculinos FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND sexo = 'Masculino';
+    SELECT COUNT(*) INTO total_femeninos FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND sexo = 'Femenino';
+    SELECT COUNT(*) INTO total_nuevos FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND tipo_ins = 'Nuevo';
+    SELECT COUNT(*) INTO total_regulares FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND tipo_ins = 'Regular';
+    SELECT COUNT(*) INTO total_repitientes FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND tipo_ins = 'Repitiente';
+
+    INSERT INTO estadisticas_inscripcion (año, grado_id, total_estudiantes, total_masculinos, total_femeninos, total_nuevos, total_regulares, total_repitientes)
+    VALUES (NEW.ins_para, NEW.grado_id, total_estudiantes, total_masculinos, total_femeninos, total_nuevos, total_regulares, total_repitientes)
+    ON DUPLICATE KEY UPDATE
+        total_estudiantes = VALUES(total_estudiantes),
+        total_masculinos = VALUES(total_masculinos),
+        total_femeninos = VALUES(total_femeninos),
+        total_nuevos = VALUES(total_nuevos),
+        total_regulares = VALUES(total_regulares),
+        total_repitientes = VALUES(total_repitientes);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_estudiante_update` AFTER UPDATE ON `estudiante` FOR EACH ROW BEGIN
+    DECLARE total_estudiantes INT;
+    DECLARE total_masculinos INT;
+    DECLARE total_femeninos INT;
+    DECLARE total_nuevos INT;
+    DECLARE total_regulares INT;
+    DECLARE total_repitientes INT;
+
+    -- Contar los estudiantes para el año y grado específicos del nuevo registro
+    SELECT COUNT(*) INTO total_estudiantes FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id;
+    SELECT COUNT(*) INTO total_masculinos FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND sexo = 'Masculino';
+    SELECT COUNT(*) INTO total_femeninos FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND sexo = 'Femenino';
+    SELECT COUNT(*) INTO total_nuevos FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND tipo_ins = 'Nuevo';
+    SELECT COUNT(*) INTO total_regulares FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND tipo_ins = 'Regular';
+    SELECT COUNT(*) INTO total_repitientes FROM estudiante WHERE ins_para = NEW.ins_para AND grado_id = NEW.grado_id AND tipo_ins = 'Repitiente';
+
+    -- Insertar o actualizar las estadísticas para el nuevo registro
+    INSERT INTO estadisticas_inscripcion (año, grado_id, total_estudiantes, total_masculinos, total_femeninos, total_nuevos, total_regulares, total_repitientes)
+    VALUES (NEW.ins_para, NEW.grado_id, total_estudiantes, total_masculinos, total_femeninos, total_nuevos, total_regulares, total_repitientes)
+    ON DUPLICATE KEY UPDATE
+        total_estudiantes = VALUES(total_estudiantes),
+        total_masculinos = VALUES(total_masculinos),
+        total_femeninos = VALUES(total_femeninos),
+        total_nuevos = VALUES(total_nuevos),
+        total_regulares = VALUES(total_regulares),
+        total_repitientes = VALUES(total_repitientes);
+
+    -- Repetir para el antiguo registro si el año o grado ha cambiado
+    IF OLD.ins_para != NEW.ins_para OR OLD.grado_id != NEW.grado_id THEN
+        -- Contar los estudiantes para el año y grado específicos del antiguo registro
+        SELECT COUNT(*) INTO total_estudiantes FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id;
+        SELECT COUNT(*) INTO total_masculinos FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND sexo = 'Masculino';
+        SELECT COUNT(*) INTO total_femeninos FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND sexo = 'Femenino';
+        SELECT COUNT(*) INTO total_nuevos FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND tipo_ins = 'Nuevo';
+        SELECT COUNT(*) INTO total_regulares FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND tipo_ins = 'Regular';
+        SELECT COUNT(*) INTO total_repitientes FROM estudiante WHERE ins_para = OLD.ins_para AND grado_id = OLD.grado_id AND tipo_ins = 'Repitiente';
+
+        -- Insertar o actualizar las estadísticas para el antiguo registro
+        INSERT INTO estadisticas_inscripcion (año, grado_id, total_estudiantes, total_masculinos, total_femeninos, total_nuevos, total_regulares, total_repitientes)
+        VALUES (OLD.ins_para, OLD.grado_id, total_estudiantes, total_masculinos, total_femeninos, total_nuevos, total_regulares, total_repitientes)
+        ON DUPLICATE KEY UPDATE
+            total_estudiantes = VALUES(total_estudiantes),
+            total_masculinos = VALUES(total_masculinos),
+            total_femeninos = VALUES(total_femeninos),
+            total_nuevos = VALUES(total_nuevos),
+            total_regulares = VALUES(total_regulares),
+            total_repitientes = VALUES(total_repitientes);
+    END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `familia`
+--
+
+CREATE TABLE `familia` (
+  `id_f` int(11) NOT NULL,
+  `id_estudiante` int(11) NOT NULL,
+  `id_representante` int(11) NOT NULL,
+  `id_padre_madre` int(11) NOT NULL,
+  `foto` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `grados`
+--
+
+CREATE TABLE `grados` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inscripcion`
+--
+
+CREATE TABLE `inscripcion` (
+  `id` int(11) NOT NULL,
+  `id_curso` int(11) NOT NULL,
+  `id_estudiante` int(11) NOT NULL,
+  `id_representante` int(11) NOT NULL,
+  `id_tipo_ins` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `padre_madre`
+--
+
+CREATE TABLE `padre_madre` (
+  `id_padre_madre` int(11) NOT NULL,
+  `cedula_p` int(8) NOT NULL,
+  `apellidos_p` varchar(50) NOT NULL,
+  `nombres_p` varchar(50) NOT NULL,
+  `fecha_nac_p` date NOT NULL,
+  `edad` int(11) NOT NULL,
+  `ocupacion_p` enum('Estudiante','Empleado','Obrero','Desempleado','Otro') NOT NULL,
+  `tel_p` bigint(11) NOT NULL,
+  `direccion_p` varchar(100) NOT NULL,
+  `parentesco` enum('Padre','Madre') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `representante`
+--
+
+CREATE TABLE `representante` (
+  `id_representante` int(11) NOT NULL,
+  `cedula_r` int(8) NOT NULL,
+  `apellidos` varchar(50) NOT NULL,
+  `nombres` varchar(50) NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `edad` int(11) NOT NULL,
+  `ocupacion` enum('Estudiante','Empleado','Obrero','Desempleado','Otro') NOT NULL,
+  `tel_r` bigint(12) NOT NULL,
+  `direccion_r` varchar(100) NOT NULL,
+  `parentesco` enum('Padre','Madre','Tio','Hermano','Otro') DEFAULT NULL,
+  `ingreso_mes` int(20) DEFAULT NULL,
+  `carnet_patria` enum('Si','No') NOT NULL,
+  `ser_car` int(24) DEFAULT NULL,
+  `codigo_car` int(24) DEFAULT NULL,
+  `entidad_ban` varchar(50) DEFAULT NULL,
+  `tipo_cta` enum('Corriente','Ahorro','No posee') DEFAULT NULL,
+  `num_cuenta` bigint(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `secciones`
+--
+
+CREATE TABLE `secciones` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(10) NOT NULL,
+  `etapa` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_ins`
+--
+
+CREATE TABLE `tipo_ins` (
+  `id` int(11) NOT NULL,
+  `tipo` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `nom_ape` varchar(50) NOT NULL,
+  `usuario` varchar(50) NOT NULL,
+  `gdo_ins` enum('Licenciado','T.S.U','Bachiller') NOT NULL,
+  `contrasena` varchar(255) NOT NULL,
+  `id_cargo` enum('1','2','3') NOT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `tiempo_inicio` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `tiempo_cierre` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+haz las correcciones necesarias que te pedi sin hacer muchos cambios en la logica que ya tengo, solo agrega la parte de inscripcion y la de curso tal cual te la pedi

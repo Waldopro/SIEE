@@ -1,0 +1,7 @@
+/* Establecer el mismo tamaño para ambos botones */
+.swal2-popup .btn-imprimir,
+.swal2-popup .btn-cerrar {
+  min-width: 200px;  /* Ajusta este valor según el tamaño que desees */
+  font-size: 16px;    /* Ajusta el tamaño del texto si es necesario */
+  padding: 10px;      /* Ajusta el padding si es necesario */
+}

@@ -1,0 +1,96 @@
+
+ 
+body {
+  font-family: Arial, sans-serif;
+  
+}
+
+
+h1 {
+  text-align: center;
+}
+
+form {
+  text-align: center;
+  margin-top: 20px;
+  margin: 0;
+  padding: 20px;
+ 
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="text"] {
+  padding: 5px;
+  font-size: 14px;
+}
+
+button[type="submit"] {
+  padding: 10px 20px;
+  font-size: 14px;
+  background-image: linear-gradient(to bottom, #007bff, #0000ff);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-image: linear-gradient(to bottom, #007bff, #0000ff);
+}
+
+
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+.pdf,
+      .volver {
+                background-color: #4CAF50;
+                border: none;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                transition: border 0.3s;
+            }
+
+            .pdf:hover {
+                border: 2px solid #4CAF50;
+            }
+
+            .volver:hover {
+                border: 2px solid #f44336;
+            }
+
+            @media print {
+
+                .pdf,
+                .volver {
+                    display: none;
+                }
+            }
+
+            @media print {
+                .btn-container {
+                    display: none;
+                }
+            }
+            .footer {
+  background-image: linear-gradient(to bottom, #007bff, #0000ff);
+  color: black;
+  padding: 7px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0; /* Set left position to 0 */
+  right: 0; /* Set right position to 0 */
+  width: 100%;
+}

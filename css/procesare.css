@@ -1,0 +1,78 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: #007bff;
+}
+
+
+
+.a {
+    background: blue;
+    display: inline-block;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointed;
+}
+button.pdf-button {
+    background-color: #ff0000;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+button.pdf-button i {
+    margin-right: 8px;
+}
+
+.btn-eliminar{
+    background:red;
+}   
+.btn-eliminar:hover{
+    background: linear-gradient(red,crimson)!important;
+}
+.btn-editar{
+    background: #007bff;
+}
+.btn-editar:hover{
+    background: linear-gradient(blue,#007bff);
+}   
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+}
+
+th,thead td {
+    background-color: #007bff;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+.h1{
+    color:#fff;
+    text-shadow: 0px 0px 5px #000;
+}
+.opciones{
+    width: 20%;
+    max-width: 200px;
+}

@@ -1,0 +1,91 @@
+.content {
+    flex: 1;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+canvas {
+    margin-bottom: 15px;
+    max-width: 100%;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.grafico-pequeno {
+    width: 300px !important; /* Ajusta el ancho */
+    height: 300px !important; /* Ajusta la altura */
+    margin: 0 auto; /* Centrar */
+}
+
+.grafico {
+    display: none;
+    width: 100%;
+    max-width: 700px;
+}
+
+.grafico.show {
+    display: block;
+}
+
+/* Contenedor para alinear los botones */
+.button-container {
+    display: flex;
+    justify-content: center; /* Centrar los botones horizontalmente */
+    gap: 15px; /* Espaciado entre botones */
+    margin-top: 20px; /* Separar los botones del contenido anterior */
+}
+
+/* Estilos comunes para los botones */
+button, .pdf-button, .csv-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s; /* Animación para hover */
+}
+
+/* Botón PDF */
+.pdf-button {
+    background-color: #dc3545; /* Rojo */
+}
+
+/* Botón CSV */
+.csv-button {
+    background-color: #28a745; /* Verde */
+}
+
+/* Icono dentro del botón */
+button img {
+    margin-right: 8px;
+}
+
+/* Efecto hover para los botones */
+button:hover, .pdf-button:hover, .csv-button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+    /* Centrar el formulario de selección de curso */
+    .formCurso {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    /* Centrar el selector */
+    .curso {
+        margin: 0 10px;
+    }
+
